@@ -1,0 +1,22 @@
+# Configurações locais com segredos
+src/configs/database.php
+.env
+*.env
+.env.*
+
+# Logs
+*.log
+logs/
+
+# Uploads/temporários
+uploads/
+tmp/
+cache/
+
+# IDEs
+.idea/
+.vscode/
+
+# Sistema
+.DS_Store
+Thumbs.db
