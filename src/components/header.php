@@ -1,10 +1,10 @@
 <?php 
 /**
- *
  * @psalm-import-type Route from types
  * 
  * @var Route[] $routes
  * @var string $title
+ * @var array $erros = []
  */
 ?>
 <!DOCTYPE html>
@@ -15,4 +15,4 @@
     <title><?= $title ?></title>
 </head>
 <body>
-    <?php require_once 'navbar.php'; ?>
+    

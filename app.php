@@ -10,13 +10,15 @@ require_once 'path.php';
 define('COMPONENTS', getComponentsPath());
 define('CONTROLLERS', getControllersPath());
 define('FUNCTIONS', getFunctionsPath());
-define('PAGES', getPagesPath());
+define('VIEWS', getViewsPath());
 define('CONFIGS', getConfigsPath());
 define('SERVICES', getServicesPath());
+define('MODELS', getModelsPath());
 
 // Requires
 require_once FUNCTIONS . 'functions.php';
 require_once CONFIGS . 'routes.php';
 require_once CONFIGS . 'database.php';
+require_once SERVICES . 'autoload.php';
 require_once SERVICES . 'route_resolver.php';
 require_once SERVICES . 'router.php';

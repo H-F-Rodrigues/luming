@@ -5,7 +5,7 @@ function makePage(string $page, array $args): void {
 
     require_once COMPONENTS . 'header.php';
     
-    require_once PAGES . $page . '.php';
+    require_once VIEWS . $page . '.php';
 
     require_once COMPONENTS . 'footer.php';
 }

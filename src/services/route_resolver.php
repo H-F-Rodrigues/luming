@@ -1,27 +1,27 @@
 <?php
 
 /**
- * Summary of resolveRoute
- * @psalm-import-type Route from types
- */
-
-/**
- * Summary of resolveRoute
  * @param string $uri
  * @param Route[] $routes
- * @return Route 
+ * @param string $method (GET, POST, etc.)
+ * @return Route|null
  */
-function resolveRoute(string $uri, $routes): ?array {
-    foreach($routes as $route) {
-        if(empty($route['value'])) {
+function resolveRoute(string $uri, array $routes, string $method = 'GET'): ?array {
+    foreach ($routes as $route) {
+        // Verifica se o método da rota coincide (se definido)
+        if (isset($route['method']) && strtoupper($route['method']) !== $method) {
             continue;
         }
 
-        if(empty($route['isRegex']) && $uri === $route['value']) {
+        if (empty($route['value'])) {
+            continue;
+        }
+
+        if (empty($route['isRegex']) && $uri === $route['value']) {
             return $route;
         }
 
-        if($route['isRegex'] && preg_match($route['value'], $uri)) {
+        if ($route['isRegex'] && preg_match($route['value'], $uri)) {
             return $route;
         }
     }

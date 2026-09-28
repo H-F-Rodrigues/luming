@@ -1,7 +1,5 @@
 <?php
 
-function makeNotFound(): void {
-    makePage('not_found', [
-        'title' => '404 - Página não encontrada'
-    ]);
+function makeNotFound() {
+    echo 'Not Found';
 }

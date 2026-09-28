@@ -1,19 +1,36 @@
 <?php
 
-$uri = $_SERVER['PATH_INFO'] ?? null;
-
-if(empty($uri)) {
-    makeHome();
-
-    return;
+// Inicia sessão se ainda não iniciou
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
+// session_destroy();
 
-$route = resolveRoute($uri, $routes);
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
-if(!$route || empty($route['call']) || !function_exists($route['call'])) {
+// Resolve a rota com base na URI e método HTTP
+$route = resolveRoute($uri, $routes, $method);
+
+if (!$route || empty($route['controller']) || empty($route['call'])) {
     makeNotFound();
-
     return;
 }
 
-$route['call']($route, $uri);
+$controllerClass = $route['controller'];
+$methodName = $route['call'];
+
+// Verifica se a classe existe
+if (!class_exists($controllerClass)) {
+    makeNotFound();
+    return;
+}
+
+// Verifica se o método é estático e existe
+if (!method_exists($controllerClass, $methodName)) {
+    makeNotFound();
+    return;
+}
+
+// Chama o método estático da classe, passando os parâmetros
+$controllerClass::$methodName($route, $uri);

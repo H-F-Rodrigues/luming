@@ -17,8 +17,8 @@ function getFunctionsPath(): string {
     return getPath('functions');
 }
 
-function getPagesPath(): string {
-    return getPath('pages');
+function getViewsPath(): string {
+    return getPath('views');
 }
 
 function getConfigsPath(): string {
@@ -27,4 +27,8 @@ function getConfigsPath(): string {
 
 function getServicesPath(): string {
     return getPath('services');
+}
+
+function getModelsPath(): string {
+    return getPath('models');
 }

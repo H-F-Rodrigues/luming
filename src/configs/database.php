@@ -4,7 +4,6 @@ define("BD_DSN", "mysql:dbname=db_luming;host=127.0.0.1;charset=utf8mb4");
 define("BD_USUARIO", "root");
 define("BD_SENHA", "");
 
-
 try {
     // Criamos um array de opções para forçar o comando de inicialização em UTF-8
     $opcoes = [
