@@ -33,4 +33,15 @@ if (!method_exists($controllerClass, $methodName)) {
 }
 
 // Chama o método estático da classe, passando os parâmetros
+/*try {
+    $controllerClass::$methodName($route, $uri);
+} catch (Exception $e) {
+    makePage('erro', [
+        'title' => "Erro: {$e->getCode()}",
+        'erros' => [],
+        'msg' => $e->getMessage(),
+        'code' => $e->getCode()
+    ]);
+}*/
+
 $controllerClass::$methodName($route, $uri);

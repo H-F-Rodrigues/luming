@@ -19,262 +19,102 @@ $routes = [
         'isRegex' => false,
         'method' => 'GET'
     ],
-    // Game
+    // Membros
     [
-        'id' => 'join',
-        'value' => '/game/join',
-        'controller' => 'controllers\\PartidaController',
-        'call' => 'joinMatch',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'left',
-        'value' => '/game/left',
-        'controller' => 'controllers\\PartidaController',
-        'call' => 'leftMatch',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'start',
-        'value' => '/game/start',
-        'controller' => 'controllers\\JogadorController',
-        'call' => 'makeStart',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'start_post',
-        'value' => '/game/save',
-        'controller' => 'controllers\\JogadorController',
-        'call' => 'saveJogador',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'game',
-        'value' => '/game',
-        'controller' => 'controllers\\PartidaController',
-        'call' => 'makeGame',
+        'id' => 'membros',
+        'value' => '/membros',
+        'controller' => 'controllers\\MembroController',
+        'call' => 'makeMembros',
         'isRegex' => false,
         'method' => 'GET'
     ],
     [
-        'id' => 'game_wait',
-        'value' => '/game/wait',
-        'controller' => 'controllers\\PartidaController',
-        'call' => 'makeWait',
+        'id' => 'membro',
+        'value' => '/^\/membros\/[0-9]+$/',
+        'controller' => 'controllers\\MembroController',
+        'call' => 'makeMembro',
+        'isRegex' => true,
+        'method' => 'GET'
+    ],
+    [
+        'id' => 'membroSave',
+        'value' => '/membros/save',
+        'controller' => 'controllers\\MembroController',
+        'call' => 'saveMembro',
+        'isRegex' => false,
+        'method' => 'POST'
+    ],
+    [
+        'id' => 'membroEdit',
+        'value' => '/membros/edit',
+        'controller' => 'controllers\\MembroController',
+        'call' => 'makeEdit',
+        'isRegex' => false,
+        'method' => 'POST'
+    ],
+    [
+        'id' => 'membroUpdate',
+        'value' => '/membros/update',
+        'controller' => 'controllers\\MembroController',
+        'call' => 'updateMembro',
+        'isRegex' => false,
+        'method' => 'POST'
+    ],
+    [
+        'id' => 'membroDelete',
+        'value' => '/membros/delete',
+        'controller' => 'controllers\\MembroController',
+        'call' => 'deleteMembro',
+        'isRegex' => false,
+        'method' => 'POST'
+    ],
+    // Cliente
+    [
+        'id' => 'clientes',
+        'value' => '/clientes',
+        'controller' => 'controllers\\ClienteController',
+        'call' => 'makeClientes',
         'isRegex' => false,
         'method' => 'GET'
     ],
     [
-        'id' => 'game_question',
-        'value' => '/game/question',
-        'controller' => 'controllers\\PartidaController',
-        'call' => 'makeQuestion',
-        'isRegex' => false,
+        'id' => 'cliente',
+        'value' => '/^\/clientes\/[0-9]+$/',
+        'controller' => 'controllers\\ClienteController',
+        'call' => 'makeCliente',
+        'isRegex' => true,
         'method' => 'GET'
     ],
     [
-        'id' => 'game_answer',
-        'value' => '/game/question',
-        'controller' => 'controllers\\PartidaController',
-        'call' => 'saveAnswer',
+        'id' => 'clienteSave',
+        'value' => '/clientes/save',
+        'controller' => 'controllers\\ClienteController',
+        'call' => 'saveCliente',
         'isRegex' => false,
         'method' => 'POST'
     ],
     [
-        'id' => 'game_show_answer',
-        'value' => '/game/answer',
-        'controller' => 'controllers\\PartidaController',
-        'call' => 'makeAnswer',
-        'isRegex' => false,
-        'method' => 'GET'
-    ],
-    [
-        'id' => 'game_rank',
-        'value' => '/game/rank',
-        'controller' => 'controllers\\PartidaController',
-        'call' => 'makeRank',
-        'isRegex' => false,
-        'method' => 'GET'
-    ],
-    [
-        'id'       => 'api_status',
-        'value'    => '/api/partida/status',
-        'controller' => 'controllers\\PartidaController',
-        'call'     => 'getStatus',
-        'isRegex'  => false,
-        'method'   => 'GET'
-    ],
-    // HOST
-    [
-        'id' => 'host_cadastro',
-        'value' => '/host/cadastro',
-        'controller' => 'controllers\\HostController',
-        'call' => 'makeCadastro',
-        'isRegex' => false,
-        'method' => 'GET'
-    ],
-    [
-        'id' => 'host_cadastrar',
-        'value' => '/host/cadastro',
-        'controller' => 'controllers\\HostController',
-        'call' => 'saveCadastro',
+        'id' => 'clienteEdit',
+        'value' => '/clientes/edit',
+        'controller' => 'controllers\\ClienteController',
+        'call' => 'makeEdit',
         'isRegex' => false,
         'method' => 'POST'
     ],
     [
-        'id' => 'host_login',
-        'value' => '/host/login',
-        'controller' => 'controllers\\HostController',
-        'call' => 'makeLogin',
-        'isRegex' => false,
-        'method' => 'GET'
-    ],
-    [
-        'id' => 'host_logar',
-        'value' => '/host/login',
-        'controller' => 'controllers\\HostController',
-        'call' => 'login',
+        'id' => 'clienteUpdate',
+        'value' => '/clientes/update',
+        'controller' => 'controllers\\ClienteController',
+        'call' => 'updateCliente',
         'isRegex' => false,
         'method' => 'POST'
     ],
     [
-        'id' => 'host_central',
-        'value' => '/host/central',
-        'controller' => 'controllers\\HostController',
-        'call' => 'makeCentral',
-        'isRegex' => false,
-        'method' => 'GET'
-    ],
-    [
-        'id' => 'host_logout',
-        'value' => '/host/logout',
-        'controller' => 'controllers\\HostController',
-        'call' => 'logout',
+        'id' => 'clienteDelete',
+        'value' => '/clientes/delete',
+        'controller' => 'controllers\\ClienteController',
+        'call' => 'deleteCliente',
         'isRegex' => false,
         'method' => 'POST'
     ],
-    [
-        'id' => 'host',
-        'value' => '/host',
-        'controller' => 'controllers\\HostController',
-        'call' => 'makeGame',
-        'isRegex' => false,
-        'method' => 'GET'
-    ],
-    [
-        'id' => 'host_post',
-        'value' => '/host',
-        'controller' => 'controllers\\HostController',
-        'call' => 'makeGame',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'host_return',
-        'value' => '/host/return',
-        'controller' => 'controllers\\HostController',
-        'call' => 'return',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'host_remove',
-        'value' => '/host/remove',
-        'controller' => 'controllers\\HostController',
-        'call' => 'removeMatch',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'host_create',
-        'value' => '/host/create',
-        'controller' => 'controllers\\HostController',
-        'call' => 'makeCreate',
-        'isRegex' => false,
-        'method' => 'GET'
-    ],
-    [
-        'id' => 'host_save',
-        'value' => '/host/create',
-        'controller' => 'controllers\\HostController',
-        'call' => 'saveMatch',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'host_hub',
-        'value' => '/host/hub',
-        'controller' => 'controllers\\HostController',
-        'call' => 'makeHub',
-        'isRegex' => false,
-        'method' => 'GET'
-    ],
-    [
-        'id' => 'host_add',
-        'value' => '/host/add',
-        'controller' => 'controllers\\HostController',
-        'call' => 'saveQuestion',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'host_question_remove',
-        'value' => '/host/question/remove',
-        'controller' => 'controllers\\HostController',
-        'call' => 'removeQuestion',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'host_start',
-        'value' => '/host/start',
-        'controller' => 'controllers\\HostController',
-        'call' => 'startQuiz',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'host_quiz',
-        'value' => '/host/quiz',
-        'controller' => 'controllers\\HostController',
-        'call' => 'makeQuiz',
-        'isRegex' => false,
-        'method' => 'GET'
-    ],
-    [
-        'id' => 'host_next',
-        'value' => '/host/quiz',
-        'controller' => 'controllers\\HostController',
-        'call' => 'nextQuestion',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'host_rank',
-        'value' => '/host/rank',
-        'controller' => 'controllers\\HostController',
-        'call' => 'updateRank',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'host_ranking',
-        'value' => '/host/rank',
-        'controller' => 'controllers\\HostController',
-        'call' => 'makeRank',
-        'isRegex' => false,
-        'method' => 'GET'
-    ],
-    [
-        'id' => 'host_ranking',
-        'value' => '/host/finish',
-        'controller' => 'controllers\\HostController',
-        'call' => 'finishMatch',
-        'isRegex' => false,
-        'method' => 'POST'
-    ]
 ];

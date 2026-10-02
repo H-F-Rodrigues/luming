@@ -15,4 +15,6 @@
     <title><?= $title ?></title>
 </head>
 <body>
-    
+    <?php foreach ($erros as $erro): ?>
+        <span><?= $erro ?></span>
+    <?php endforeach ?>
