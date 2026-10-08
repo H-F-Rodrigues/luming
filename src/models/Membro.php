@@ -8,31 +8,25 @@ use models\Funcao;
 class Membro {
     public $id = 0;
     public $nome = '';
+    public $sobre = '';
     public $email = '';
     public $senha = '';
+    public $foto = '';
     public $funcaoId = '';
     public $funcao = '';
-    public $dtCriado = null;
-
-    /*function __construct($nome = '', $email = '', $senha = '', $funcaoId = 0, $funcao = '', $id = 0, $dt_criado = null) {
-        $this->nome = mb_strtoupper($nome);
-        $this->email = mb_strtolower($email);
-        $this->senha = strpos($senha, '$2y$') === 0 ? $senha : password_hash($senha, PASSWORD_BCRYPT);
-        $this->funcaoId = $funcaoId;
-        $this->funcao = $funcao;
-        $this->id = $id;
-        $this->dtCriado = $dt_criado;
-    }*/
+    public $criadoEm = null;
 
     static public function find(int $id_membro): ?self {
         $sql = "SELECT 
             m.id_membro as id,
             m.nm_membro as nome,
+            m.ds_sobre as sobre,
             m.ds_email as email,
             m.ds_senha as senha,
+            m.nm_foto as foto,
             m.id_funcao as funcaoId,
             f.nm_funcao as funcao,
-            m.dt_criado as dtCriado
+            m.created_at as criadoEm
         FROM tb_membro AS m
             JOIN tb_funcao AS f
             ON f.id_funcao = m.id_funcao 
@@ -50,11 +44,13 @@ class Membro {
         $sql = "SELECT 
             m.id_membro as id,
             m.nm_membro as nome,
+            m.ds_sobre as sobre,
             m.ds_email as email,
             m.ds_senha as senha,
+            m.nm_foto as foto,
             m.id_funcao as funcaoId,
             f.nm_funcao as funcao,
-            m.dt_criado as dtCriado
+            m.created_at as criadoEm
         FROM tb_membro AS m
             JOIN tb_funcao AS f
             ON f.id_funcao = m.id_funcao";
@@ -66,7 +62,20 @@ class Membro {
     }
     
     static public function findByEmail(string $email_cliente): ?self {
-        $sql = "SELECT * FROM tb_membro WHERE ds_email = :email";
+        $sql = "SELECT 
+            m.id_membro as id,
+            m.nm_membro as nome,
+            m.ds_sobre as sobre,
+            m.ds_email as email,
+            m.ds_senha as senha,
+            m.nm_foto as foto,
+            m.id_funcao as funcaoId,
+            f.nm_funcao as funcao,
+            m.created_at as criadoEm
+        FROM tb_membro AS m
+            JOIN tb_funcao AS f
+            ON f.id_funcao = m.id_funcao
+            WHERE ds_email = :email";
 
         $query = PDO->prepare($sql);
         $query->execute(['email' => $email_cliente]);
@@ -132,15 +141,16 @@ class Membro {
 
     public function save() {
         $sql = "INSERT INTO tb_membro
-        (nm_membro, ds_email, ds_senha, id_funcao)
+        (nm_membro, ds_email, ds_senha, nm_foto, id_funcao)
         VALUES
-        (:nome, :email, :senha, :funcao)";
+        (:nome, :email, :senha, :foto, :funcao)";
 
         $query = PDO->prepare($sql);
         $query->execute([
             'nome' => $this->nome,
             'email' => $this->email,
             'senha' => $this->senha,
+            'foto' => $this->foto,
             'funcao' => $this->funcaoId
         ]);
 
@@ -152,6 +162,7 @@ class Membro {
             nm_membro = :nome,
             ds_email = :email,
             ds_senha = :senha,
+            nm_foto = :foto,
             id_funcao = :funcao
         WHERE id_membro = :id_membro";
 
@@ -160,6 +171,7 @@ class Membro {
             'nome' => $this->nome,
             'email' => $this->email,
             'senha' => $this->senha,
+            'foto' => $this->foto,
             'funcao' => $this->funcaoId,
             'id_membro' => $this->id
         ]);

@@ -19,102 +19,186 @@ $routes = [
         'isRegex' => false,
         'method' => 'GET'
     ],
-    // Membros
+
+    // Contato / orçamento (formulário da homepage)
     [
-        'id' => 'membros',
-        'value' => '/membros',
-        'controller' => 'controllers\\MembroController',
-        'call' => 'makeMembros',
+        'id' => 'contato',
+        'value' => '/contato',
+        'controller' => 'controllers\\HomepageController',
+        'call' => 'makeContato',
         'isRegex' => false,
         'method' => 'GET'
     ],
     [
-        'id' => 'membro',
-        'value' => '/^\/membros\/[0-9]+$/',
-        'controller' => 'controllers\\MembroController',
-        'call' => 'makeMembro',
+        'id' => 'contato-enviar',
+        'value' => '/contato',
+        'controller' => 'controllers\\HomepageController',
+        'call' => 'saveContato',
+        'isRegex' => false,
+        'method' => 'POST'
+    ],
+
+    // Portfólio (listagem e detalhe por id numérico)
+    [
+        'id' => 'portfolio',
+        'value' => '/portfolio',
+        'controller' => 'controllers\\HomepageController',
+        'call' => 'makePortfolio',
+        'isRegex' => false,
+        'method' => 'GET'
+    ],
+    [
+        'id' => 'portfolio-projeto',
+        'value' => '/^\/portfolio\/[0-9]+$/',
+        'controller' => 'controllers\\HomepageController',
+        'call' => 'makeProjeto',
         'isRegex' => true,
         'method' => 'GET'
     ],
+
+    // Serviços (detalhe por slug)
     [
-        'id' => 'membroSave',
-        'value' => '/membros/save',
-        'controller' => 'controllers\\MembroController',
-        'call' => 'saveMembro',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'membroEdit',
-        'value' => '/membros/edit',
-        'controller' => 'controllers\\MembroController',
-        'call' => 'makeEdit',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'membroUpdate',
-        'value' => '/membros/update',
-        'controller' => 'controllers\\MembroController',
-        'call' => 'updateMembro',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'membroDelete',
-        'value' => '/membros/delete',
-        'controller' => 'controllers\\MembroController',
-        'call' => 'deleteMembro',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    // Cliente
-    [
-        'id' => 'clientes',
-        'value' => '/clientes',
-        'controller' => 'controllers\\ClienteController',
-        'call' => 'makeClientes',
-        'isRegex' => false,
-        'method' => 'GET'
-    ],
-    [
-        'id' => 'cliente',
-        'value' => '/^\/clientes\/[0-9]+$/',
-        'controller' => 'controllers\\ClienteController',
-        'call' => 'makeCliente',
+        'id' => 'servico',
+        'value' => '/^\/servicos\/[a-z0-9-]+$/',
+        'controller' => 'controllers\\HomepageController',
+        'call' => 'makeServico',
         'isRegex' => true,
         'method' => 'GET'
     ],
+
+    // Login (área exclusiva)
     [
-        'id' => 'clienteSave',
-        'value' => '/clientes/save',
-        'controller' => 'controllers\\ClienteController',
-        'call' => 'saveCliente',
+        'id' => 'login',
+        'value' => '/login',
+        'controller' => 'controllers\\LoginController',
+        'call' => 'makeLogin',
+        'isRegex' => false,
+        'method' => 'GET'
+    ],
+    [
+        'id' => 'login-entrar',
+        'value' => '/login',
+        'controller' => 'controllers\\LoginController',
+        'call' => 'login',
         'isRegex' => false,
         'method' => 'POST'
     ],
+
     [
-        'id' => 'clienteEdit',
-        'value' => '/clientes/edit',
-        'controller' => 'controllers\\ClienteController',
-        'call' => 'makeEdit',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'clienteUpdate',
-        'value' => '/clientes/update',
-        'controller' => 'controllers\\ClienteController',
-        'call' => 'updateCliente',
-        'isRegex' => false,
-        'method' => 'POST'
-    ],
-    [
-        'id' => 'clienteDelete',
-        'value' => '/clientes/delete',
-        'controller' => 'controllers\\ClienteController',
-        'call' => 'deleteCliente',
-        'isRegex' => false,
-        'method' => 'POST'
+        'id' => 'exemplo',
+        'value' => '/^\/exemplos\/[0-9]+$/',
+        'controller' => 'controllers\\ExemploController',
+        'call' => 'exemplo',
+        'isRegex' => true,
+        'method' => 'GET'
     ],
 ];
+
+/* ----------------------------------------------------------------------
+ * DASHBOARD (área administrativa) — tudo sob o prefixo /admin.
+ *
+ * O router exige login para qualquer URL /admin (ver services/router.php) e entende
+ * PUT/PATCH/DELETE enviados como POST + campo oculto "_method".
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Gera as 7 rotas de um recurso administrável:
+ *
+ *   GET    /admin/{slug}               makeList
+ *   GET    /admin/{slug}/novo          makeCreate
+ *   POST   /admin/{slug}               $calls['save']
+ *   GET    /admin/{slug}/{id}          makeShow
+ *   GET    /admin/{slug}/{id}/editar   makeEdit
+ *   PUT    /admin/{slug}/{id}          $calls['update']
+ *   DELETE /admin/{slug}/{id}          $calls['delete']
+ *
+ * As rotas com {id} usam regex (só números), como a rota de exemplo acima.
+ *
+ * @param array{save: string, update: string, delete: string} $calls
+ * @return Route[]
+ */
+$adminRecurso = static function (string $slug, string $controller, array $calls): array {
+    $base = '/admin/' . $slug;
+    $comId = '/^\/admin\/' . $slug . '\/[0-9]+$/';
+    $comIdEditar = '/^\/admin\/' . $slug . '\/[0-9]+\/editar$/';
+    $classe = 'controllers\\' . $controller;
+
+    return [
+        ['id' => "admin-$slug-index",     'value' => $base,           'controller' => $classe, 'call' => 'makeList',       'isRegex' => false, 'method' => 'GET'],
+        ['id' => "admin-$slug-novo",      'value' => $base . '/novo', 'controller' => $classe, 'call' => 'makeCreate',     'isRegex' => false, 'method' => 'GET'],
+        ['id' => "admin-$slug-criar",     'value' => $base,           'controller' => $classe, 'call' => $calls['save'],   'isRegex' => false, 'method' => 'POST'],
+        ['id' => "admin-$slug-show",      'value' => $comId,          'controller' => $classe, 'call' => 'makeShow',       'isRegex' => true,  'method' => 'GET'],
+        ['id' => "admin-$slug-editar",    'value' => $comIdEditar,    'controller' => $classe, 'call' => 'makeEdit',       'isRegex' => true,  'method' => 'GET'],
+        ['id' => "admin-$slug-atualizar", 'value' => $comId,          'controller' => $classe, 'call' => $calls['update'], 'isRegex' => true,  'method' => 'PUT'],
+        ['id' => "admin-$slug-excluir",   'value' => $comId,          'controller' => $classe, 'call' => $calls['delete'], 'isRegex' => true,  'method' => 'DELETE'],
+    ];
+};
+
+$routes = array_merge(
+    $routes,
+
+    [
+        // Visão geral
+        [
+            'id' => 'admin-dashboard',
+            'value' => '/admin',
+            'controller' => 'controllers\\DashboardController',
+            'call' => 'makeDashboard',
+            'isRegex' => false,
+            'method' => 'GET'
+        ],
+        // O LoginController redireciona para /dashboard após o login: encaminha para /admin.
+        [
+            'id' => 'dashboard-atalho',
+            'value' => '/dashboard',
+            'controller' => 'controllers\\DashboardController',
+            'call' => 'redirectAdmin',
+            'isRegex' => false,
+            'method' => 'GET'
+        ],
+        // Sair da área exclusiva (POST + CSRF)
+        [
+            'id' => 'admin-sair',
+            'value' => '/admin/sair',
+            'controller' => 'controllers\\DashboardController',
+            'call' => 'logout',
+            'isRegex' => false,
+            'method' => 'POST'
+        ],
+    ],
+
+    $adminRecurso('portfolio', 'PortifolioController', ['save' => 'savePortifolio', 'update' => 'updatePortifolio', 'delete' => 'deletePortifolio']),
+    $adminRecurso('mensagens', 'MensagemController', ['save' => 'saveMensagem', 'update' => 'updateMensagem', 'delete' => 'deleteMensagem']),
+    $adminRecurso('clientes', 'ClienteController', ['save' => 'saveCliente', 'update' => 'updateCliente', 'delete' => 'deleteCliente']),
+    $adminRecurso('membros', 'MembroController', ['save' => 'saveMembro', 'update' => 'updateMembro', 'delete' => 'deleteMembro']),
+
+    // Configurações: editar e excluir a PRÓPRIA conta (o membro logado)
+    [
+        [
+            'id' => 'admin-configuracoes',
+            'value' => '/admin/configuracoes',
+            'controller' => 'controllers\\MembroController',
+            'call' => 'makeConfig',
+            'isRegex' => false,
+            'method' => 'GET'
+        ],
+        [
+            'id' => 'admin-configuracoes-atualizar',
+            'value' => '/admin/configuracoes',
+            'controller' => 'controllers\\MembroController',
+            'call' => 'updateConta',
+            'isRegex' => false,
+            'method' => 'PUT'
+        ],
+        [
+            'id' => 'admin-configuracoes-excluir',
+            'value' => '/admin/configuracoes',
+            'controller' => 'controllers\\MembroController',
+            'call' => 'deleteConta',
+            'isRegex' => false,
+            'method' => 'DELETE'
+        ],
+    ]
+);
+
+unset($adminRecurso);

@@ -31,6 +31,8 @@ class Cliente{
         $query->setFetchMode(\PDO::FETCH_CLASS, self::class);
         $cliente = $query->fetch();
 
+        $cliente = self::atualizarMascaraTelefone($cliente);
+
         return $cliente ?: null;
     }
 
@@ -49,7 +51,22 @@ class Cliente{
         $query = PDO->prepare($sql);
         $query->execute();
         $query->setFetchMode(\PDO::FETCH_CLASS, self::class);
-        return $query->fetchAll();
+
+        $clientes = self::atualizarMascaraTelefone($query->fetchAll());
+        
+        return $clientes;
+    }
+
+    static public function atualizarMascaraTelefone(array|self|null $clientes) {
+        if (is_array($clientes)) {
+            foreach ($clientes as $cliente) {
+                $cliente->telefone = aplicarMascaraTelefone($cliente->telefone);
+            }
+        } elseif (!empty($clientes)) {
+            $clientes->telefone = aplicarMascaraTelefone($clientes->telefone);
+        }
+
+        return $clientes;
     }
 
     static public function findByEmail(string $email_cliente): ?self {
@@ -74,7 +91,7 @@ class Cliente{
         return $cliente ?: null;
     }
 
-    static public function validar($method): ?array {
+    static public function validar($method) {
         $cliente = new self;
         $erros = [];
         if (isset($method)) {
@@ -112,7 +129,7 @@ class Cliente{
                 $id = $method['id_cliente'] ?? 0;
                 $nome = mb_strtoupper($method['nome']);
                 $email = mb_strtolower($method['email']);
-                $telefone = $method['telefone'];
+                $telefone = removerMascaraTelefone($method['telefone']);
                 $ramoId = $method['ramo'];
 
                 $cliente->id = $id;

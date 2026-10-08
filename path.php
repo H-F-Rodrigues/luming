@@ -5,6 +5,11 @@ function getPath(string $folder): string {
     return BASE_PATH . DIRECTORY_SEPARATOR . SOURCES . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR;
 }
 
+function getPublicPath(string $folder): string {
+    // BasePath/src/folder/
+    return BASE_PATH . DIRECTORY_SEPARATOR . PUB . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR;
+}
+
 function getComponentsPath(): string {
     return getPath('components');
 }
@@ -31,4 +36,8 @@ function getServicesPath(): string {
 
 function getModelsPath(): string {
     return getPath('models');
+}
+
+function getStoragePath(): string {
+    return getPublicPath('storage');
 }
